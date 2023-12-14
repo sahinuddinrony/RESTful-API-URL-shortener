@@ -18,6 +18,7 @@ class RegisterController extends BaseController
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|min:6',
+            // 'password' => 'required|min:6|confirm',
             'confirm_password' => 'required|same:password',
         ]);
 
@@ -69,6 +70,19 @@ class RegisterController extends BaseController
 
 
     }
+
+    public function logout()
+    {
+        auth()->user()->tokens()->delete();
+        return $this->sendResponse([], 'User Logged Out');
+    }
+
+    // public function logout(Request $request)
+    // {
+    //     $request->user()->currentAccessToken()->delete();
+
+    //     return $this->sendResponse([], 'User Logged Out');
+    // }
 }
 
 

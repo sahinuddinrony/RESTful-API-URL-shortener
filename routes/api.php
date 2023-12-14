@@ -20,9 +20,12 @@ Route::post('/login', [RegisterController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1')->group(function () {
+
+        // Route::resource('profile' [ProfileController::class])->only(['create', 'store']);
         Route::post('/shorten-url', [UrlController::class, 'shortenUrl'])->name('v1.shorten-url');
         Route::get('/list-urls', [UrlController::class, 'listUrls'])->name('v1.list-urls');
         Route::get('/{shortUrl}', [UrlController::class, 'redirect'])->name('redirect');
+        Route::post('logout', [RegisterController::class, 'logout']);
     });
 
     Route::prefix('v2')->group(function () {
