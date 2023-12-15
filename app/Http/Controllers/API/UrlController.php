@@ -39,6 +39,48 @@ class UrlController extends Controller
         return $this->baseController->sendResponse(['short_url' => $url->short_url], 'Shortened URL already exists.');
     }
 
+    // private function generateUniqueShortUrl($length = 6)
+    // {
+    //     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    //     do {
+    //         $shortUrl = substr(str_shuffle($characters), 0, $length);
+    //         $exists = Url::where('short_url', $shortUrl)->exists();
+
+    //         if (!$exists) {
+    //             return $shortUrl;
+    //         }
+
+    //         // Increase the length or use a larger character set for the next iteration
+    //         $length++;
+    //     } while (true);
+    // }
+
+    private function generateUniqueShortUrl($length = 6)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()-_+=<>?';
+
+        do {
+            $shortUrl = substr(str_shuffle($characters), 0, $length);
+            $exists = Url::where('short_url', $shortUrl)->exists();
+
+            if (!$exists) {
+                return $shortUrl;
+            }
+
+            // If a collision occurs, append a counter to the short URL and try again
+            $counter = 1;
+            do {
+                $candidate = $shortUrl . $counter;
+                $exists = Url::where('short_url', $candidate)->exists();
+                $counter++;
+            } while ($exists);
+
+            return $candidate;
+        } while (true);
+    }
+
+
     public function listUrls(Request $request)
     {
         $user = Auth::user();
@@ -67,12 +109,12 @@ class UrlController extends Controller
         }
     }
 
-    private function generateUniqueShortUrl()
-    {
-        do {
-            $shortUrl = Str::random(6);
-        } while (Url::where('short_url', $shortUrl)->exists());
+    // private function generateUniqueShortUrl()
+    // {
+    //     do {
+    //         $shortUrl = Str::random(6);
+    //     } while (Url::where('short_url', $shortUrl)->exists());
 
-        return $shortUrl;
-    }
+    //     return $shortUrl;
+    // }
 }
