@@ -14,7 +14,7 @@ class RegisterController extends BaseController
 {
     public function register(Request $request)
     {
-       $validator = validator::make($request->all(),[
+        $validator = validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|min:6',
@@ -22,8 +22,7 @@ class RegisterController extends BaseController
             'confirm_password' => 'required|same:password',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return $this->sendError('Validation Error', $validator->errors());
         }
 
@@ -45,12 +44,11 @@ class RegisterController extends BaseController
     {
 
         $validator = Validator::make($request->all(), [
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if($validator->fails())
-        {
+        if ($validator->fails()) {
             return $this->sendError('Validation Error', $validator->errors());
         }
 
@@ -64,7 +62,7 @@ class RegisterController extends BaseController
             // return response()->json(['message' => 'Login successful', 'user' => $user, 'token' => $token]);
         } else {
 
-            return $this->sendError('Unauthorized', ['error' =>'Unauthorized credentials']);
+            return $this->sendError('Unauthorized', ['error' => 'Unauthorized credentials']);
             // return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
@@ -77,25 +75,4 @@ class RegisterController extends BaseController
         return $this->sendResponse([], 'User Logged Out');
     }
 
-    // public function logout(Request $request)
-    // {
-    //     $request->user()->currentAccessToken()->delete();
-
-    //     return $this->sendResponse([], 'User Logged Out');
-    // }
 }
-
-
-// $request->validate([
-        //     'email' => 'required|email',
-        //     'password' => 'required',
-        // ]);
-
-        // if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        //     $user = Auth::user();
-        //     $token = $user->createToken('auth_token')->plainTextToken;
-
-        //     return response()->json(['message' => 'Login successful', 'user' => $user, 'token' => $token]);
-        // } else {
-        //     return response()->json(['message' => 'Invalid credentials'], 401);
-        // }

@@ -11,13 +11,11 @@ class BaseController extends Controller
     {
         $response = [
             'success' => true,
-            'data'    => $result,
+            'data' => $result,
             'message' => $message,
         ];
 
-        // return response()->json($response, 200);
-        // return response()->json($response, Response::HTTP_CREATED, options:JSON_UNESCAPED_SLASHES);
-        return response()->json($response, Response::HTTP_CREATED, options:JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+        return response()->json($response, Response::HTTP_CREATED, options: JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
     }
 
     public function sendError($error, $errorMessages = [], $code = Response::HTTP_NOT_FOUND)
@@ -27,8 +25,7 @@ class BaseController extends Controller
             'message' => $error,
         ];
 
-        if(!empty($errorMessages))
-        {
+        if (!empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
 
