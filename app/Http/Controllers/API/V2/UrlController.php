@@ -2,21 +2,38 @@
 
 namespace App\Http\Controllers\API\V2;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Url;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BaseController;
 
 class UrlController extends Controller
 {
-    public function shortenUrl(Request $request)
+    protected $baseController;
+
+    public function __construct(BaseController $baseController)
     {
-        // Implementation for v2
+        $this->baseController = $baseController;
     }
 
-    public function listUrls()
+    public function listUrls(Request $request)
     {
-        // Implementation for v2
+        $user = Auth::user();
+        $urls = Url::where('user_id', $user->id)->get();
+
+        // Add visit_count to each URL in the response
+        $formattedUrls = $urls->map(function ($url) {
+            return [
+                'long_url' => $url->long_url,
+                'short_url' => $url->short_url,
+                'visit_count' => $url->visit_count,
+            ];
+        });
+
+        return $this->baseController->sendResponse(['urls' => $formattedUrls], 'List of URLs retrieved successfully.');
     }
+
+
 }
